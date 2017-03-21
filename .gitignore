@@ -1,0 +1,3 @@
+# ignore IntelliJ IDEA configurations
+.idea/*
+/curation-rest-api/curation-rest-api.iml
