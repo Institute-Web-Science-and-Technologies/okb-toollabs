@@ -1,0 +1,212 @@
+swagger: "2.0"
+info:
+  title: OKB curation API
+  description: TODO
+  version: "0.0.0"
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /detailed/{item_id}:
+    get:
+      summary: Detailed Wikidata item
+      description: |
+        The /detailed/{item_id} endpoint returns a detailed description of the
+        Wikidata item Q<item_id>. The returned item consists of
+        a label, aliases, description and statements.
+      tags:
+        - detailed
+      parameters:
+        - $ref: '#/parameters/item_id_param'
+      responses:
+        200:
+          description: A detailed item.
+          schema:
+            $ref: '#/definitions/DetailedItem'
+        400:
+          description: Bad request. Most likely <item_id> is not an integer.
+          schema:
+            $ref: '#/definitions/BadRequestError'
+        404:
+          description: Item Q<item_id> not found in Wikidata.
+          schema:
+            $ref: '#/definitions/NotFoundError'
+  /detailed/{item_id}/{property_id}:
+    get:
+      summary: Detailed Wikidata statement group
+      description: |
+        The /detailed/{item_id}/{property_id} endpoint returns a detailed
+        description of the statement group with property P<property_id>
+        belonging to item Q<property_id>. Each statement consists of
+        its value, references, and qualifiers.
+      tags:
+        - detailed
+      parameters:
+        - $ref: '#/parameters/item_id_param'
+        - $ref: '#/parameters/property_id_param'
+      responses:
+        200:
+          description: A detailed statement group.
+          schema:
+            $ref: '#/definitions/DetailedStatementGroup'
+        400:
+          description: Bad request. Most likely <item_id> or <property_id> are not integers.
+          schema:
+            $ref: '#/definitions/BadRequestError'
+        404:
+          description: |
+            Either item Q<item_id> or property P<property_id> not found
+            in Wikidata.
+          schema:
+            $ref: '#/definitions/NotFoundError'
+definitions:
+  DetailedItem:
+    type: object
+    properties:
+      item_id:
+        type: integer
+        description: Numeric Wikidata item ID.
+      label:
+        type: string
+        description: English label of item.
+      aliases:
+        type: array
+        items:
+          type: string
+        description: English aliases for the item.
+      description:
+        type: string
+        description: Sentence describing the item.
+      statement_groups:
+        type: array
+        items:
+          $ref: '#/definitions/DetailedStatementGroup'
+        description: Array of statement groups in item.
+      url:
+        type: string
+        description: URL to get the detailed item, e.g. /detailed/42 .
+  DetailedStatementGroup:
+    type: object
+    properties:
+      item_id:
+        type: integer
+      property_id:
+        type: integer
+        description: Numeric Wikidata property ID.
+      statements:
+        type: array
+        items:
+          $ref: '#/definitions/DetailedStatement'
+        description: Array of statements in group.
+      url:
+        type: string
+        description: URL to get the detailed statement group, e.g. /detailed/42/31 .
+  DetailedStatement:
+    type: object
+    properties:
+      item_id:
+        type: integer
+      property_id:
+        type: integer
+      statement_uid:
+        type: string
+        description: Unique identifier of the statement, e.g. Q42$F078E5B3-F9A8-480E-B7AC-D97778CBBEF9.
+      snak:
+        $ref: '#/definitions/DetailedSnak'
+      qualifiers:
+        type: array
+        items:
+          $ref: '#/definitions/DetailedQualifier'
+        description: Qualifiers of statement.
+      references:
+        type: array
+        items:
+          $ref: '#/definitions/DetailedReference'
+        description: References of statement.
+      rank:
+        type: string
+        enum:
+          - preferred
+          - normal
+          - deprecated
+        description: Rank of statement.
+  DetailedQualifier:
+    type: object
+    properties:
+      item_id:
+        type: integer
+      property_id:
+        type: integer
+      statement_uid:
+        type: string
+      snak:
+        $ref: '#/definitions/DetailedSnak'
+  DetailedReference:
+    type: object
+    properties:
+      item_id:
+        type: integer
+      property_id: 
+        type: integer
+      statement_uid:
+        type: string
+      snaks:
+        type: array
+        items:
+          $ref: '#/definitions/DetailedSnak'
+        description: Array of snaks belonging to the reference.
+      snaks_order:
+        type: array
+        items:
+          type: integer
+        description: Array of property IDs displaying the ordering of snaks.
+  DetailedSnak:
+    type: object
+    properties:
+      property_id:
+        type: integer
+      data_type:
+        type: string
+        description: Data type of the property.
+      data_value:
+        type: object
+        description: Value of qualifier. Object format depends on data_type.
+  BadRequestError:
+    type: object
+    description: Object, returned in the case of a "400 Bad Request" error.
+    properties:
+      error_message:
+        type: string
+        description: Human-readable error message.
+      parameter:
+        type: string
+        description: Name of first parameter encountered, which doesn't fulfill requirements.
+  NotFoundError:
+    type: object
+    description: Object, returned in the case of a "404 Not Found" error.
+    properties:
+      error_message:
+        type: string
+        description: Human-readable error message.
+      object_id:
+        type: integer
+        description: numeric ID of the missing object, e.g. item ID.
+      object_type:
+        type: string
+        description: Type of missing object, e.g. DetailedItem.
+parameters:
+  item_id_param:
+    name: item_id
+    in: path
+    description: Numeric Wikidata item id, e.g. 42 for Q42
+    required: true
+    type: number
+    format: integer
+  property_id_param:
+    name: property_id
+    in: path
+    description: Numeric Wikidata property id, e.g. 31 for P31
+    required: true
+    type: number
+    format: integer
