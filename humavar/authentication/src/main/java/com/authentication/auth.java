@@ -86,8 +86,8 @@ public class auth {
     List<NameValuePair> params = new ArrayList<NameValuePair>(2);
     params.add(new BasicNameValuePair("action", "clientlogin"));
     params.add(new BasicNameValuePair("loginreturnurl", "http://example.com"));
-    params.add(new BasicNameValuePair("username", "mujji89"));
-    params.add(new BasicNameValuePair("password", "mujji123"));
+    params.add(new BasicNameValuePair("username", "user"));
+    params.add(new BasicNameValuePair("password", "secret"));
     params.add(new BasicNameValuePair("rememberMe", "1"));
     params.add(new BasicNameValuePair("logintoken", token));
     params.add(new BasicNameValuePair("format", "json"));
