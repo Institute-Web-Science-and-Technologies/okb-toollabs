@@ -1,3 +1,9 @@
+*.class
+
 # ignore IntelliJ IDEA configurations
 .idea/*
 /curation-rest-api/curation-rest-api.iml
+
+# ignore netbeans build output
+*.netbeans_automatic_build
+
