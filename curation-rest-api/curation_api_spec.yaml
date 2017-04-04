@@ -8,15 +8,15 @@ consumes:
 produces:
   - application/json
 paths:
-  /detailed/{item_id}:
+  /details/{item_id}:
     get:
-      summary: Detailed Wikidata item
+      summary: Returns a detailed Wikidata item.
       description: |
         The /detailed/{item_id} endpoint returns a detailed description of the
         Wikidata item Q<item_id>. The returned item consists of
         a label, aliases, description and statements.
       tags:
-        - detailed
+        - details
       parameters:
         - $ref: '#/parameters/item_id_param'
       responses:
@@ -25,23 +25,23 @@ paths:
           schema:
             $ref: '#/definitions/DetailedItem'
         400:
-          description: Bad request. Most likely <item_id> is not an integer.
+          description: Bad request. <item_id> is not an positive integer.
           schema:
             $ref: '#/definitions/BadRequestError'
         404:
           description: Item Q<item_id> not found in Wikidata.
           schema:
             $ref: '#/definitions/NotFoundError'
-  /detailed/{item_id}/{property_id}:
+  /details/{item_id}/{property_id}:
     get:
-      summary: Detailed Wikidata statement group
+      summary: Returns a detailed Wikidata statement group.
       description: |
         The /detailed/{item_id}/{property_id} endpoint returns a detailed
         description of the statement group with property P<property_id>
         belonging to item Q<property_id>. Each statement consists of
         its value, references, and qualifiers.
       tags:
-        - detailed
+        - details
       parameters:
         - $ref: '#/parameters/item_id_param'
         - $ref: '#/parameters/property_id_param'
@@ -51,21 +51,68 @@ paths:
           schema:
             $ref: '#/definitions/DetailedStatementGroup'
         400:
-          description: Bad request. Most likely <item_id> or <property_id> are not integers.
+          description: Bad request. <item_id> or <property_id> are not positive integers.
           schema:
             $ref: '#/definitions/BadRequestError'
         404:
           description: |
-            Either item Q<item_id> or property P<property_id> not found
+            Either item Q<item_id> or statement with P<property_id> in the item not found
             in Wikidata.
           schema:
             $ref: '#/definitions/NotFoundError'
+  /summary/{item_id}:
+    get:
+      summary: Returns a summary of an item.
+      description: TODO
+      tags:
+        - summary
+      parameters:
+        - $ref: '#/parameters/item_id_param'
+      responses:
+        200:
+          description: An item summary.
+          schema:
+            $ref: '#/definitions/SummarizedItem'
+        400:
+          description: Bad request. <item_id> is not a positive integer.
+          schema:
+            $ref: '#/definitions/BadRequestError'
+        404:
+          description: Item Q<item_id> not found in Wikidata.
+          schema:
+            $ref: '#/definitions/NotFoundError'
+  /summary/{item_id}/{property_id}:
+    get:
+      summary: Returns a summary of a statement group.
+      description: TODO
+      tags:
+        - summary
+      parameters:
+        - $ref: '#/parameters/item_id_param'
+        - $ref: '#/parameters/property_id_param'
+      responses:
+        200:
+          description: An item summary.
+          schema:
+            $ref: '#/definitions/SummarizedStatementGroup'
+        400:
+          description: Bad request. <item_id> or <property_id> are not positive integers.
+          schema:
+            $ref: '#/definitions/BadRequestError'
+        404:
+          description: |
+            Either item Q<item_id> or statement with P<property_id> in the item not found
+            in Wikidata.
+          schema:
+            $ref: '#/definitions/NotFoundError'
+            
 definitions:
   DetailedItem:
     type: object
     properties:
       item_id:
         type: integer
+        minimum: 1
         description: Numeric Wikidata item ID.
       label:
         type: string
@@ -85,15 +132,19 @@ definitions:
         description: Array of statement groups in item.
       url:
         type: string
-        description: URL to get the detailed item, e.g. /detailed/42 .
+        description: URL to get the detailed item, e.g. /details/42 .
   DetailedStatementGroup:
     type: object
     properties:
       item_id:
         type: integer
+        minimum: 1
       property_id:
         type: integer
-        description: Numeric Wikidata property ID.
+        minimum: 1
+      property_label:
+        type: string
+        description: English Wikidata name of the property.
       statements:
         type: array
         items:
@@ -101,14 +152,16 @@ definitions:
         description: Array of statements in group.
       url:
         type: string
-        description: URL to get the detailed statement group, e.g. /detailed/42/31 .
+        description: URL to get the detailed statement group, e.g. /details/42/31 .
   DetailedStatement:
     type: object
     properties:
       item_id:
         type: integer
+        minimum: 1
       property_id:
         type: integer
+        minimum: 1
       statement_uid:
         type: string
         description: Unique identifier of the statement, e.g. Q42$F078E5B3-F9A8-480E-B7AC-D97778CBBEF9.
@@ -136,8 +189,13 @@ definitions:
     properties:
       item_id:
         type: integer
+        minimum: 1
       property_id:
         type: integer
+        minimum: 1
+      property_label:
+        type: string
+        description: English Wikidata name of the property.
       statement_uid:
         type: string
       snak:
@@ -147,8 +205,13 @@ definitions:
     properties:
       item_id:
         type: integer
-      property_id: 
+        minimum: 1
+      property_id:
         type: integer
+        minimum: 1
+      property_label:
+        type: string
+        description: English Wikidata name of the property.
       statement_uid:
         type: string
       snaks:
@@ -166,12 +229,99 @@ definitions:
     properties:
       property_id:
         type: integer
+        minimum: 1
       data_type:
         type: string
         description: Data type of the property.
       data_value:
         type: object
         description: Value of qualifier. Object format depends on data_type.
+  SummarizedItem:
+    type: object
+    description: |
+      A summarized item with summaries of all statement groups.
+    properties:
+      item_id:
+        type: integer
+        minimum: 1
+      label:
+        type: string
+      description:
+        type: string
+      property_count:
+        type: integer
+        minimum: 0
+        description: Number of statement groups in the item.
+      reference_count:
+        type: integer
+        minimum: 0
+        description: Number of references in the item.
+      source_histogram:
+        $ref: '#/definitions/SourceHistogram'
+      statement_groups:
+        type: array
+        items:
+          $ref: '#/definitions/SummarizedStatementGroup'
+      url:
+        type: string
+        description: e.g. /summary/42
+  SummarizedStatementGroup:
+    type: object
+    properties:
+      item_id:
+        type: integer
+        minimum: 1
+      property_id:
+        type: integer
+        minimum: 1
+      property_label:
+        type: string
+        description: English Wikidata name of the property.
+      data_type:
+        type: string
+        description: Data type of the property.
+      statement_count:
+        type: integer
+        minimum: 1
+        description: Number of distinct statements in this group.
+      reference_count:
+        type: integer
+        minimum: 0
+        description: Number of distinct references in this group.
+      source_histogram:
+        $ref: '#/definitions/SourceHistogram'
+      preferred_count:
+        type: integer
+        minimum: 0
+        description: Number of statements ranked as "preferred".
+      normal_count:
+        type: integer
+        minimum: 0
+        description: Number of statements ranked as "normal".
+      deprecated_count:
+        type: integer
+        minimum: 0
+        description: Number of statements ranked as "deprecated".
+      url:
+        type: string
+        description: e.g. /details/42/31
+  SourceHistogram:
+    type: array
+    description: |
+      Histogram of distinct occurrences of sources in references of the corresponding item
+      or statement group.
+    items:
+      type: object
+      properties:
+        source:
+          type: string
+          description: | 
+            A source, typically a domain-name or subdomain-name like "en.wikipedia.org" or "www.nytimes.com".
+        count:
+          type: integer
+          minimum: 1
+          description: |
+            Count of distinct occurences of the source in the corresponding item or statement group.
   BadRequestError:
     type: object
     description: Object, returned in the case of a "400 Bad Request" error.
@@ -203,6 +353,7 @@ parameters:
     required: true
     type: number
     format: integer
+    minimum: 1
   property_id_param:
     name: property_id
     in: path
@@ -210,3 +361,4 @@ parameters:
     required: true
     type: number
     format: integer
+    minimum: 1
