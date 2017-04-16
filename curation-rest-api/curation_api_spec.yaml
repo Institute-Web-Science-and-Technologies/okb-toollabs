@@ -187,33 +187,11 @@ definitions:
   DetailedQualifier:
     type: object
     properties:
-      item_id:
-        type: integer
-        minimum: 1
-      property_id:
-        type: integer
-        minimum: 1
-      property_label:
-        type: string
-        description: English Wikidata name of the property.
-      statement_uid:
-        type: string
       snak:
         $ref: '#/definitions/DetailedSnak'
   DetailedReference:
     type: object
     properties:
-      item_id:
-        type: integer
-        minimum: 1
-      property_id:
-        type: integer
-        minimum: 1
-      property_label:
-        type: string
-        description: English Wikidata name of the property.
-      statement_uid:
-        type: string
       snaks:
         type: array
         items:
@@ -230,10 +208,12 @@ definitions:
       property_id:
         type: integer
         minimum: 1
-      data_type:
+      property_label:
+        type: string
+      datatype:
         type: string
         description: Data type of the property.
-      data_value:
+      datavalue:
         type: object
         description: Value of qualifier. Object format depends on data_type.
   SummarizedItem:
