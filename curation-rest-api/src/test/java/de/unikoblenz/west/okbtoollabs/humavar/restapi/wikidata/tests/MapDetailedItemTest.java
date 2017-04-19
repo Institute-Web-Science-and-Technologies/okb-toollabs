@@ -1,10 +1,13 @@
-package de.unikoblenz.west.okbtoollabs.humavar.restapi.wikidata;
+package de.unikoblenz.west.okbtoollabs.humavar.restapi.wikidata.tests;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import de.unikoblenz.west.okbtoollabs.humavar.restapi.serialize.details.DetailedItem;
 import de.unikoblenz.west.okbtoollabs.humavar.restapi.serialize.details.DetailedStatement;
 import de.unikoblenz.west.okbtoollabs.humavar.restapi.serialize.details.DetailedStatementGroup;
+import de.unikoblenz.west.okbtoollabs.humavar.restapi.wikidata.DetailedItemMapper;
+import de.unikoblenz.west.okbtoollabs.humavar.restapi.wikidata.EntityMissingException;
+import de.unikoblenz.west.okbtoollabs.humavar.restapi.wikidata.InvalidEntityIdException;
 import org.junit.Before;
 import org.junit.Test;
 
