@@ -39,9 +39,9 @@ public class SerializeDetailsTest {
         // Serialize DetailedSnak.
         JsonObject serializedSnak = parser.parse(gson.toJson(snak)).getAsJsonObject();
         // Test.
-        assertEquals(serializedSnak.getAsJsonPrimitive("property_id").getAsInt(), 31);
-        assertEquals(serializedSnak.getAsJsonPrimitive("property_label").getAsString(), "instance of");
-        assertEquals(serializedSnak.getAsJsonPrimitive("datatype").getAsString(), "wikibase-item");
+        assertEquals(31, serializedSnak.getAsJsonPrimitive("property_id").getAsInt());
+        assertEquals("instance of", serializedSnak.getAsJsonPrimitive("property_label").getAsString());
+        assertEquals("wikibase-item", serializedSnak.getAsJsonPrimitive("datatype").getAsString());
         assertNotNull(serializedSnak.getAsJsonObject("datavalue"));
     }
 
@@ -70,8 +70,8 @@ public class SerializeDetailsTest {
         // Serialize DetailedReference.
         JsonObject serializedReference = parser.parse(gson.toJson(reference)).getAsJsonObject();
         // Test.
-        assertEquals(serializedReference.getAsJsonArray("snaks").size(), 1);
-        assertEquals(serializedReference.getAsJsonArray("snaks_order").size(), 1);
+        assertEquals(1, serializedReference.getAsJsonArray("snaks").size());
+        assertEquals(1, serializedReference.getAsJsonArray("snaks_order").size());
     }
 
     @Test

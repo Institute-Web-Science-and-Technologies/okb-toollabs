@@ -9,8 +9,10 @@ public enum Ranks {
     normal("normal"),
     deprecated("deprecated");
 
-    String rank;
+    private String rank;
 
     Ranks(String rank) {this.rank = rank;}
+
+    public String getRank() {return rank;}
 
 }
