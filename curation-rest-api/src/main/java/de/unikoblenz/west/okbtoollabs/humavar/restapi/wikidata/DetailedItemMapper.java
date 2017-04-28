@@ -22,12 +22,12 @@ public class DetailedItemMapper {
 
     public DetailedItem mapToItem(String itemId) throws EntityMissingException, InvalidEntityIdException {
         if (!Utils.isValidItemId(itemId))
-            throw new InvalidEntityIdException(String.format("%s is not a valid item ID.", itemId));
+            throw new InvalidEntityIdException(String.format("%s is not a valid item ID.", itemId), itemId);
 
         if (object.get("entities") == null
                 || object.get("entities").getAsJsonObject().get(itemId) == null
                 || object.get("entities").getAsJsonObject().get(itemId).getAsJsonObject().get("missing") != null)
-            throw new EntityMissingException(String.format("no entity %s found in provided Wikidata result", itemId));
+            throw new EntityMissingException(String.format("no item %s found in provided Wikidata result", itemId), itemId);
 
         JsonObject wdItem = object.get("entities").getAsJsonObject().get(itemId).getAsJsonObject();
         // get numeric item ID
@@ -51,8 +51,23 @@ public class DetailedItemMapper {
     }
 
     public DetailedStatementGroup mapToStatementGroup(String itemId, String propertyId) throws EntityMissingException, InvalidEntityIdException {
-        // TODO: Implement.
-        return null;
+        if (!Utils.isValidItemId(itemId))
+            throw new InvalidEntityIdException(String.format("%s is not a valid item ID.", itemId), itemId);
+
+        if (!Utils.isValidPropertyId(propertyId))
+            throw new InvalidEntityIdException(String.format("%s is not a valid property ID.", propertyId), propertyId);
+
+        if (object.get("entities") == null
+                || object.get("entities").getAsJsonObject().get(itemId) == null
+                || object.get("entities").getAsJsonObject().get(itemId).getAsJsonObject().get("missing") != null)
+            throw new EntityMissingException(String.format("no item %s found in provided Wikidata result", itemId), itemId);
+
+        if (object.get("entities").getAsJsonObject().get(itemId).getAsJsonObject().get("claims").getAsJsonObject().get(propertyId) == null)
+            throw new EntityMissingException(String.format("no property %s found in item %s in provided Wikidata result", propertyId, itemId), propertyId);
+
+        JsonObject item = object.get("entities").getAsJsonObject().get(itemId).getAsJsonObject();
+
+        return mapToStatementGroup(Integer.parseInt(itemId.substring(1)), propertyId, item);
     }
 
     private DetailedStatementGroup mapToStatementGroup(int itemId, String propertyId, JsonObject wdItem) {

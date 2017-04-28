@@ -5,7 +5,13 @@ package de.unikoblenz.west.okbtoollabs.humavar.restapi.wikidata;
  * Created by Alex on 19.04.17.
  */
 public class EntityMissingException extends Exception {
-    EntityMissingException(String message) {
+
+    private String missingEntityId;
+
+    EntityMissingException(String message, String missingEntityId) {
         super(message);
+        this.missingEntityId = missingEntityId;
     }
+
+    public String getMissingEntityId() { return missingEntityId; }
 }

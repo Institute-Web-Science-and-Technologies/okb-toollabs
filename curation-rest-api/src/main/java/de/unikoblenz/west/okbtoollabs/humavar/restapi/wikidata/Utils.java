@@ -17,6 +17,13 @@ public class Utils {
     }
 
     /**
+     * Checks whether a given string is a valid Wikidata property ID.
+     * @param propertyId possible property ID
+     * @return true, if valid, else, false
+     */
+    public static boolean isValidPropertyId(String propertyId) { return propertyId.matches("^P\\d+$"); }
+
+    /**
      * Checks whether a given string is a valid Wikidata entity ID.
      * [QP][0-9]*
      * @param entityId possible entity ID
