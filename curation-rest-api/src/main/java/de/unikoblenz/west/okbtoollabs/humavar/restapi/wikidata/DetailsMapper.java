@@ -12,11 +12,11 @@ import java.util.Map;
  * okb-toollabs
  * Created by Alex on 19.04.17.
  */
-public class DetailedItemMapper {
+public class DetailsMapper {
 
     private JsonObject object;
 
-    public DetailedItemMapper(JsonObject wikidataResult) {
+    public DetailsMapper(JsonObject wikidataResult) {
         object = wikidataResult;
     }
 
@@ -129,7 +129,7 @@ public class DetailedItemMapper {
         String dataType = mainsnak.get("datatype").getAsString();
         // get snaktype to check if there is a value
         String snaktype = mainsnak.get("snaktype").getAsString();
-        // get the datavalue object if snaketype==value, else set it as null.
+        // get the datavalue object if snaktype==value, else set it as null.
         JsonObject dataValue = null;
         if (snaktype.equals("value")) {
             dataValue = mainsnak.get("datavalue").getAsJsonObject();

@@ -27,7 +27,8 @@ public class SummarizedItem {
     @SerializedName("url")
     public final String url;
 
-    public SummarizedItem(int itemId, String label, String description, int propertyCount, int referenceCount, List<SourceHistogramEntry> sourceHistogram, List<SummarizedStatementGroup> statementGroups, String url) {
+    public SummarizedItem(int itemId, String label, String description, int propertyCount, int referenceCount,
+                          List<SourceHistogramEntry> sourceHistogram, List<SummarizedStatementGroup> statementGroups, String url) {
         this.itemId = itemId;
         this.label = label;
         this.description = description;

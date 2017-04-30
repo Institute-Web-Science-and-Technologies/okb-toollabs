@@ -31,7 +31,7 @@ public class WikidataGetAccessor {
         // Check if all entity IDs are legal.
         String firstInvalid;
         if  ((firstInvalid = entityIds.stream().filter(id -> !Utils.isValidEntityId(id)).findFirst().orElse(null)) != null) {
-            throw new InvalidEntityIdException(String.format("%s is not a valid entity ID", firstInvalid));
+            throw new InvalidEntityIdException(String.format("%s is not a valid entity ID", firstInvalid), firstInvalid);
         }
 
         return requestEntities(entityIds);

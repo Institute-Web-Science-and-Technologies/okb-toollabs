@@ -11,13 +11,10 @@ import org.junit.Test;
  */
 public class SerializeSummaryTest {
 
-    private Gson gson;
-    private JsonParser parser;
-
     @Before
     public void init() {
-        gson = new Gson();
-        parser = new JsonParser();
+        Gson gson = new Gson();
+        JsonParser parser = new JsonParser();
     }
 
     @Test

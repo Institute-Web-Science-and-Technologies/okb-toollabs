@@ -25,7 +25,8 @@ public class DetailedStatement {
     @SerializedName("rank")
     public final Ranks rank;
 
-    public DetailedStatement(int itemId, int propertyId, String statementUid, DetailedSnak snak, List<DetailedQualifier> qualifiers, List<DetailedReference> references, Ranks rank) {
+    public DetailedStatement(int itemId, int propertyId, String statementUid, DetailedSnak snak, List<DetailedQualifier> qualifiers,
+                             List<DetailedReference> references, Ranks rank) {
         this.itemId = itemId;
         this.propertyId = propertyId;
         this.statementUid = statementUid;

@@ -33,7 +33,9 @@ public class SummarizedStatementGroup {
     @SerializedName("url")
     public final String url;
 
-    public SummarizedStatementGroup(int itemId, int propertyId, String propertyLabel, String dataType, int statementCount, int referenceCount, List<SourceHistogramEntry> sourceHistogram, int preferredCount, int normalCount, int deprecatedCount, String url) {
+    public SummarizedStatementGroup(int itemId, int propertyId, String propertyLabel, String dataType, int statementCount,
+                                    int referenceCount, List<SourceHistogramEntry> sourceHistogram, int preferredCount,
+                                    int normalCount, int deprecatedCount, String url) {
         this.itemId = itemId;
         this.propertyId = propertyId;
         this.propertyLabel = propertyLabel;

@@ -5,7 +5,7 @@ import com.google.gson.JsonParser;
 import de.unikoblenz.west.okbtoollabs.humavar.restapi.serialize.details.DetailedItem;
 import de.unikoblenz.west.okbtoollabs.humavar.restapi.serialize.details.DetailedStatement;
 import de.unikoblenz.west.okbtoollabs.humavar.restapi.serialize.details.DetailedStatementGroup;
-import de.unikoblenz.west.okbtoollabs.humavar.restapi.wikidata.DetailedItemMapper;
+import de.unikoblenz.west.okbtoollabs.humavar.restapi.wikidata.DetailsMapper;
 import de.unikoblenz.west.okbtoollabs.humavar.restapi.wikidata.EntityMissingException;
 import de.unikoblenz.west.okbtoollabs.humavar.restapi.wikidata.InvalidEntityIdException;
 import org.junit.Before;
@@ -41,7 +41,7 @@ public class MapDetailedItemTest {
 
     @Test
     public void testValidExistingItemMapping() throws InvalidEntityIdException, EntityMissingException {
-        DetailedItemMapper mapper = new DetailedItemMapper(validCompleteResult);
+        DetailsMapper mapper = new DetailsMapper(validCompleteResult);
         DetailedItem result = mapper.mapToItem("Q42");
 
         assertEquals(42, result.itemId);
@@ -63,19 +63,19 @@ public class MapDetailedItemTest {
 
     @Test(expected=EntityMissingException.class)
     public void testValidMissingItemMapping() throws InvalidEntityIdException, EntityMissingException {
-        DetailedItemMapper mapper = new DetailedItemMapper(validMissingResult);
+        DetailsMapper mapper = new DetailsMapper(validMissingResult);
         mapper.mapToItem("Q7");
     }
 
     @Test(expected=EntityMissingException.class)
     public void testInvalidMissingItemMapping() throws InvalidEntityIdException, EntityMissingException {
-        DetailedItemMapper mapper = new DetailedItemMapper(emptyResult);
+        DetailsMapper mapper = new DetailsMapper(emptyResult);
         mapper.mapToItem("Q1");
     }
 
     @Test(expected=InvalidEntityIdException.class)
     public void testInvalidEntityIdItemMapping() throws InvalidEntityIdException, EntityMissingException {
-        DetailedItemMapper mapper = new DetailedItemMapper(emptyResult);
+        DetailsMapper mapper = new DetailsMapper(emptyResult);
         mapper.mapToItem("Q32.53");
     }
 }
