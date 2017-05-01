@@ -14,10 +14,6 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
-import static java.util.logging.Logger.global;
-import jdk.nashorn.api.scripting.AbstractJSObject;
-import jdk.nashorn.api.scripting.JSObject;
-import jdk.nashorn.internal.parser.JSONParser;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -27,20 +23,32 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-
+import spark.Spark;
+import spark.servlet.SparkApplication;
 /**
  *
  * @author Mujji
  */
-public class auth {
+public class auth implements SparkApplication{
 
+     public void init() {
+
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) throws UnsupportedEncodingException, IOException {
         // TODO code application logic here
-        
-      HttpClient httpclient = HttpClients.createDefault();
+            Spark.init();
+            Spark.post("/login",  (request, response) -> {
+            //System.out.println(request.queryParams("id"));
+            String data = request.body();
+           // ResultSet result = null;
+           
+            HttpClient httpclient = HttpClients.createDefault();
     HttpPost httppost = new HttpPost("https://en.wikipedia.org/w/api.php?action=query&meta=tokens");
 
     // Request parameters and other properties.
@@ -52,8 +60,8 @@ public class auth {
     httppost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
 
     //Execute and get the response.
-    HttpResponse response = httpclient.execute(httppost);
-    HttpEntity entity = response.getEntity();
+    HttpResponse response1 = httpclient.execute(httppost);
+    HttpEntity entity = response1.getEntity();
     String token = "";
 
     if (entity != null) {
@@ -74,7 +82,21 @@ public class auth {
             instream.close();
         }
         System.out.println(token);
-    }
+}
+           
+           
+            String js="";
+            try {
+             // JsonParser parser = new JsonParser();
+            //  parser.parse(data);
+              response.status(200);
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            return js;
+
+        }); 
     }
     
     
@@ -86,8 +108,8 @@ public class auth {
     List<NameValuePair> params = new ArrayList<NameValuePair>(2);
     params.add(new BasicNameValuePair("action", "clientlogin"));
     params.add(new BasicNameValuePair("loginreturnurl", "http://example.com"));
-    params.add(new BasicNameValuePair("username", "user"));
-    params.add(new BasicNameValuePair("password", "secret"));
+    params.add(new BasicNameValuePair("username", "mujji89"));
+    params.add(new BasicNameValuePair("password", "mujji123"));
     params.add(new BasicNameValuePair("rememberMe", "1"));
     params.add(new BasicNameValuePair("logintoken", token));
     params.add(new BasicNameValuePair("format", "json"));
@@ -111,4 +133,6 @@ public class auth {
     }
     return null;
     }
+
+   
 }
