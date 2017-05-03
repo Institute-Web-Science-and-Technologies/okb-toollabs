@@ -1,13 +1,12 @@
 package de.unikoblenz.west.okbtoollabs.humavar.restapi.query;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import de.unikoblenz.west.okbtoollabs.humavar.restapi.serialize.errors.BadRequestError;
 import de.unikoblenz.west.okbtoollabs.humavar.restapi.serialize.errors.InternalServerError;
 import de.unikoblenz.west.okbtoollabs.humavar.restapi.serialize.errors.NotFoundError;
-import de.unikoblenz.west.okbtoollabs.humavar.restapi.wikidata.DetailsMapper;
 import de.unikoblenz.west.okbtoollabs.humavar.restapi.wikidata.EntityMissingException;
 import de.unikoblenz.west.okbtoollabs.humavar.restapi.wikidata.InvalidEntityIdException;
+import de.unikoblenz.west.okbtoollabs.humavar.restapi.wikidata.SummaryMapper;
 import de.unikoblenz.west.okbtoollabs.humavar.restapi.wikidata.WikidataGetAccessor;
 import spark.Request;
 
@@ -16,12 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * okb-toollabs
- * Created by Alex on 03.05.17.
+ * Created by alex on 03.05.17.
  */
-public class GetItemDetailsJsonResponse extends JsonResponse {
+public class GetItemSummaryJsonResponse extends JsonResponse {
 
-    public GetItemDetailsJsonResponse(Request req, String apiHostUrl) {
+    public GetItemSummaryJsonResponse(Request req, String apiHostUrl) {
         body = null;
 
         Gson gson = new Gson();
@@ -31,7 +29,7 @@ public class GetItemDetailsJsonResponse extends JsonResponse {
         List<String> entityIds = new ArrayList<>();
         entityIds.add(String.format("Q%s", itemId));
         try {
-            DetailsMapper mapper = new DetailsMapper(new WikidataGetAccessor(apiHostUrl).getEntities(entityIds));
+            SummaryMapper mapper = new SummaryMapper(new WikidataGetAccessor(apiHostUrl).getEntities(entityIds));
             body = gson.toJsonTree(mapper.mapToItem(entityIds.get(0))).getAsJsonObject();
             statusCode = 200;
         } catch (IOException e) {
@@ -50,6 +48,6 @@ public class GetItemDetailsJsonResponse extends JsonResponse {
                     new NotFoundError(e.getMessage(), Integer.parseInt(e.getMissingEntityId().substring(1)), "item")
             ).getAsJsonObject();
         }
-
     }
+
 }

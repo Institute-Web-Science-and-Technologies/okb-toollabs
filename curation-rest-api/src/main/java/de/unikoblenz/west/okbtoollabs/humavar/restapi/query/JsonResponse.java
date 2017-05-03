@@ -5,7 +5,11 @@ import com.google.gson.JsonObject;
 /**
  * Created by alex on 03.05.17.
  */
-public interface JsonResponse {
-    public JsonObject getBody();
-    public int getStatusCode();
+public abstract class JsonResponse {
+
+    int statusCode;
+    JsonObject body;
+
+    public JsonObject getBody() { return body; }
+    public int getStatusCode() {return statusCode; }
 }
