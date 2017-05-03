@@ -1,6 +1,7 @@
 package de.unikoblenz.west.okbtoollabs.humavar.restapi;
 
-import spark.Spark;
+import de.unikoblenz.west.okbtoollabs.humavar.restapi.query.JsonResponseFactory;
+import de.unikoblenz.west.okbtoollabs.humavar.restapi.query.RequestType;
 import spark.servlet.SparkApplication;
 
 import static spark.Spark.before;
@@ -13,19 +14,27 @@ import static spark.Spark.options;
  */
 public class CurationEndpoint implements SparkApplication {
 
+    private JsonResponseFactory responseFactory;
+    private final static String API_HOST_URL = "https://www.wikidata.org/w/api.php";
+
     @Override
     public void init() {
+        responseFactory = new JsonResponseFactory();
+
         // TODO: not secure, change parameters somehow.
         enableCORS("*", "*", "*");
 
-        get("/details/:item_id/:property_id", (req, res) -> "not implemented");
+        get("/details/:item_id/:property_id", (req, res) ->
+                responseFactory.buildResponse(req, res, RequestType.GET_STATEMENT_GROUP_DETAILS, API_HOST_URL).toString());
 
-        get("/details/:item_id", (req, res) -> "not implemented");
+        get("/details/:item_id", (req, res) ->
+                responseFactory.buildResponse(req, res, RequestType.GET_ITEM_DETAILS, API_HOST_URL).toString());
 
-        get("/summary/:item_id/:property_id", (req, res) -> "not implemented");
+        get("/summary/:item_id/:property_id", (req, res) ->
+                responseFactory.buildResponse(req, res, RequestType.GET_STATEMENT_GROUP_SUMMARY, API_HOST_URL).toString());
 
-        get("/summary/:item_id", (req, res) -> "not implemented");
-
+        get("/summary/:item_id", (req, res) ->
+                responseFactory.buildResponse(req, res, RequestType.GET_ITEM_SUMMARY, API_HOST_URL).toString());
     }
 
     // Copied from: http://sparkjava.com/tutorials/cors
