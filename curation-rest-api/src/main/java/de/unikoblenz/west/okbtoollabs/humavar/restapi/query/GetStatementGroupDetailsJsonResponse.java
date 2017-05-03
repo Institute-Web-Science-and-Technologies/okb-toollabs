@@ -1,7 +1,6 @@
 package de.unikoblenz.west.okbtoollabs.humavar.restapi.query;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import de.unikoblenz.west.okbtoollabs.humavar.restapi.serialize.errors.BadRequestError;
 import de.unikoblenz.west.okbtoollabs.humavar.restapi.serialize.errors.InternalServerError;
 import de.unikoblenz.west.okbtoollabs.humavar.restapi.serialize.errors.NotFoundError;
@@ -16,23 +15,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * okb-toollabs
- * Created by Alex on 03.05.17.
+ * Created by alex on 03.05.17.
  */
-public class GetItemDetailsJsonResponse extends JsonResponse {
+public class GetStatementGroupDetailsJsonResponse extends JsonResponse {
 
-    public GetItemDetailsJsonResponse(Request req, String apiHostUrl) {
+    public GetStatementGroupDetailsJsonResponse(Request req, String apiHostUrl) {
         body = null;
 
         Gson gson = new Gson();
 
         String itemId = req.params(":item_id");
+        String propertyId = req.params(":property_id");
 
         List<String> entityIds = new ArrayList<>();
         entityIds.add(String.format("Q%s", itemId));
         try {
             DetailsMapper mapper = new DetailsMapper(new WikidataGetAccessor(apiHostUrl).getEntities(entityIds));
-            body = gson.toJsonTree(mapper.mapToItem(entityIds.get(0))).getAsJsonObject();
+            body = gson.toJsonTree(mapper.mapToStatementGroup(entityIds.get(0), String.format("P%s", propertyId))).getAsJsonObject();
             statusCode = 200;
         } catch (IOException e) {
             statusCode = 500;

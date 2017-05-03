@@ -18,6 +18,8 @@ public class JsonResponseFactory {
             case GET_ITEM_SUMMARY:
                 response = new GetItemSummaryJsonResponse(req, apiHostUrl);
                 break;
+            case GET_STATEMENT_GROUP_DETAILS:
+                response = new GetStatementGroupDetailsJsonResponse(req, apiHostUrl);
             default:
                 throw new IllegalArgumentException("Unknown/Not implemented type given to buildResponse");
         }
