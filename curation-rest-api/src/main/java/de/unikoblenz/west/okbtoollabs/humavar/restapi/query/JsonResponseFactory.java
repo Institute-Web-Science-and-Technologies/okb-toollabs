@@ -5,7 +5,8 @@ import spark.Request;
 import spark.Response;
 
 /**
- * Created by alex on 03.05.17.
+ * okb-toollabs
+ * Created by Alex on 03.05.17.
  */
 public class JsonResponseFactory {
 
@@ -20,6 +21,10 @@ public class JsonResponseFactory {
                 break;
             case GET_STATEMENT_GROUP_DETAILS:
                 response = new GetStatementGroupDetailsJsonResponse(req, apiHostUrl);
+                break;
+            case GET_STATEMENT_GROUP_SUMMARY:
+                response = new GetStatementGroupSummaryJsonResponse(req, apiHostUrl);
+                break;
             default:
                 throw new IllegalArgumentException("Unknown/Not implemented type given to buildResponse");
         }

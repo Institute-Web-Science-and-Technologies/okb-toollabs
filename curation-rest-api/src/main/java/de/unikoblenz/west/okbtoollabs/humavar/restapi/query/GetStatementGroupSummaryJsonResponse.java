@@ -15,23 +15,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * okb-toollabs
+ * obk-toollabs
  * Created by Alex on 03.05.17.
  */
-public class GetItemSummaryJsonResponse extends JsonResponse {
+public class GetStatementGroupSummaryJsonResponse extends JsonResponse {
 
-    public GetItemSummaryJsonResponse(Request req, String apiHostUrl) {
+    GetStatementGroupSummaryJsonResponse(Request req, String apiHostUrl) {
         body = null;
 
         Gson gson = new Gson();
 
         String itemId = req.params(":item_id");
+        String propertyId = req.params(":property_id");
 
         List<String> entityIds = new ArrayList<>();
         entityIds.add(String.format("Q%s", itemId));
         try {
             SummaryMapper mapper = new SummaryMapper(new WikidataGetAccessor(apiHostUrl).getEntities(entityIds));
-            body = gson.toJsonTree(mapper.mapToItem(entityIds.get(0))).getAsJsonObject();
+            body = gson.toJsonTree(mapper.mapToStatementGroup(entityIds.get(0), String.format("P%s", propertyId))).getAsJsonObject();
             statusCode = 200;
         } catch (IOException e) {
             statusCode = 500;
@@ -50,5 +51,4 @@ public class GetItemSummaryJsonResponse extends JsonResponse {
             ).getAsJsonObject();
         }
     }
-
 }
