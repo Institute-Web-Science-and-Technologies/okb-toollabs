@@ -1,7 +1,8 @@
 package de.unikoblenz.west.okbtoollabs.humavar.restapi.query;
 
 /**
- * Created by alex on 03.05.17.
+ * okb-toollabs
+ * Created by Alex on 03.05.17.
  */
 public enum RequestType {
     GET_ITEM_DETAILS,

@@ -11,6 +11,6 @@ public abstract class JsonResponse {
     int statusCode;
     JsonObject body;
 
-    public JsonObject getBody() { return body; }
-    public int getStatusCode() {return statusCode; }
+    JsonObject getBody() { return body; }
+    int getStatusCode() {return statusCode; }
 }
