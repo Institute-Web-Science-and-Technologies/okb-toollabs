@@ -12,7 +12,7 @@ import java.util.Map;
  * okb-toollabs
  * Created by Alex on 19.04.17.
  */
-public class DetailsMapper {
+public class DetailsMapper implements WikidataObjectMapper<DetailedItem, DetailedStatementGroup> {
 
     private JsonObject object;
 
@@ -20,6 +20,7 @@ public class DetailsMapper {
         object = wikidataResult;
     }
 
+    @Override
     public DetailedItem mapToItem(String itemId) throws EntityMissingException, InvalidEntityIdException {
         if (!Utils.isValidItemId(itemId))
             throw new InvalidEntityIdException(String.format("%s is not a valid item ID.", itemId), itemId);
@@ -50,6 +51,7 @@ public class DetailsMapper {
         return new DetailedItem(numItemId, label, aliases, description, statementGroups, url);
     }
 
+    @Override
     public DetailedStatementGroup mapToStatementGroup(String itemId, String propertyId) throws EntityMissingException, InvalidEntityIdException {
         if (!Utils.isValidItemId(itemId))
             throw new InvalidEntityIdException(String.format("%s is not a valid item ID.", itemId), itemId);

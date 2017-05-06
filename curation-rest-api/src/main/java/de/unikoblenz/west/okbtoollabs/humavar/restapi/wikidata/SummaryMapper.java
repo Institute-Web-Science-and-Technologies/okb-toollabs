@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  * okb-toollabs
  * Created by Alex on 29.04.2017 at 00:30.
  */
-public class SummaryMapper {
+public class SummaryMapper implements WikidataObjectMapper<SummarizedItem, SummarizedStatementGroup> {
 
     private DetailsMapper mapper;
 

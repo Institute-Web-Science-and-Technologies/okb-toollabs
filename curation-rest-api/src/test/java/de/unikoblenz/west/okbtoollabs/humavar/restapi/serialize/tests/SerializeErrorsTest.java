@@ -11,10 +11,13 @@ import org.junit.Test;
  */
 public class SerializeErrorsTest {
 
+    Gson gson;
+    JsonParser parser;
+
     @Before
     public void init() {
-        Gson gson = new Gson();
-        JsonParser parser = new JsonParser();
+        gson = new Gson();
+        parser = new JsonParser();
     }
 
     @Test

@@ -18,37 +18,10 @@ import java.util.List;
  * okb-toollabs
  * Created by Alex on 03.05.17.
  */
-public class GetItemSummaryJsonResponse extends JsonResponse {
+public class GetItemSummaryJsonResponse extends GetWikidataItemJsonResponse {
 
     public GetItemSummaryJsonResponse(Request req, String apiHostUrl) {
-        body = null;
-
-        Gson gson = new Gson();
-
-        String itemId = req.params(":item_id");
-
-        List<String> entityIds = new ArrayList<>();
-        entityIds.add(String.format("Q%s", itemId));
-        try {
-            SummaryMapper mapper = new SummaryMapper(new WikidataGetAccessor(apiHostUrl).getEntities(entityIds));
-            body = gson.toJsonTree(mapper.mapToItem(entityIds.get(0))).getAsJsonObject();
-            statusCode = 200;
-        } catch (IOException e) {
-            statusCode = 500;
-            body = gson.toJsonTree(
-                    new InternalServerError("Error in accessing Wikidata."))
-                    .getAsJsonObject();
-        } catch (InvalidEntityIdException e) {
-            statusCode = 400;
-            body = gson.toJsonTree(
-                    new BadRequestError(e.getMessage(), e.getInvalidEntityId())
-            ).getAsJsonObject();
-        } catch (EntityMissingException e) {
-            statusCode = 404;
-            body = gson.toJsonTree(
-                    new NotFoundError(e.getMessage(), Integer.parseInt(e.getMissingEntityId().substring(1)), "item")
-            ).getAsJsonObject();
-        }
+        super(req, SummaryMapper::new, apiHostUrl);
     }
 
 }
